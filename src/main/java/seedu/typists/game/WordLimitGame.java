@@ -1,15 +1,10 @@
 package seedu.typists.game;
 
 import seedu.typists.exception.InvalidStringInputException;
-import seedu.typists.ui.TextUi;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static seedu.typists.common.Utils.getWordLineFromStringArray;
-import static seedu.typists.common.Utils.getWordLines;
 import static seedu.typists.parser.StringParser.splitString;
 
 public class WordLimitGame extends Game {
@@ -17,7 +12,7 @@ public class WordLimitGame extends Game {
     protected ArrayList<String[]> wordLines;
     protected int wordLimit;
     private int gameIndex;
-    private final int numberOfWordsDisplayed;
+    private final int wordsPerLine;
     private final String content1;
     private long beginTime;
 
@@ -26,7 +21,7 @@ public class WordLimitGame extends Game {
         super();
         this.eachWord = new ArrayList<>(100);
         this.gameIndex = 0;
-        this.numberOfWordsDisplayed = wordsPerLine;
+        this.wordsPerLine = wordsPerLine;
         this.content1 = targetWordSet;
         this.wordLimit = getWordLimit();
     }
@@ -60,7 +55,20 @@ public class WordLimitGame extends Game {
             e.printStackTrace();
         }
         eachWord = new ArrayList<>(eachWord.subList(0, wordLimit));
-        wordLines = getWordLineFromStringArray(eachWord);
+    }
+
+    public String[] getDisplayLines(ArrayList<String>wordLists, int row) {
+        int startIndex = (row - 1) * wordsPerLine;
+        assert startIndex >= 0 : "word index should be non-negative";
+        String[] line = new String[wordsPerLine];
+        try {
+            for (int i = 0; i < wordsPerLine; i++) {
+                line[i] = wordLists.get(startIndex + i);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println( "exceed content maximum.");
+        }
+        return line;
     }
 
     public void game()  {
@@ -76,19 +84,22 @@ public class WordLimitGame extends Game {
             assert gameIndex < getTotalSentence() : "There are still texts to be typed.";
             String temp = "";
             int number = 0;
-
+            int row = 0;// for method: getDisplayLines()
+            row ++;
             while (gameIndex < getTotalSentence()) {
                 temp += eachWord.get(gameIndex) + " ";
                 gameIndex += 1;
                 number += 1;
-                if (number >= numberOfWordsDisplayed) {
+                if (number >= wordsPerLine) {
                     break;
                 }
             }
 
             actualWord += temp;
             temp = temp.trim();
-            ui.printLine(temp);
+            String[] displayed = getDisplayLines(eachWord,row);
+            displayedLines.add(displayed);
+            ui.printLine(displayed);
             String fullCommand = ui.readCommand();
             inputWord += fullCommand + " ";
 
@@ -137,7 +148,17 @@ public class WordLimitGame extends Game {
 
     public void wordLimitGameSummary() {
         double realGameTime = duration(beginTime, getTimeNow());
-        HashMap<String, Object> summary = handleSummary(wordLines, userLines, realGameTime, "Word-limited");
+        HashMap<String, Object> summary = handleSummary(displayedLines, userLines, realGameTime, "Word-limited");
+        for (String[] arr : displayedLines) {
+            System.out.println("text");
+            System.out.println(Arrays.toString(arr));
+        }
+
+        for (String[] arr : userLines) {
+            System.out.println("input");
+            System.out.println(Arrays.toString(arr));
+        }
+
         handleStorage(summary);
     }
 
