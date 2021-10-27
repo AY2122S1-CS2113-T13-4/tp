@@ -23,7 +23,7 @@
 
 Once the CommandFactory reads a 'word' command, a word limit game will begin.
 
-Gonna to change this .puml diagram later - zhansen
+Gonna to change this .puml diagram to .xml later - zhansen
 
 ![](uml/WordLimitMode.png)
 

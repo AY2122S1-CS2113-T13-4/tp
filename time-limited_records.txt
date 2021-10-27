@@ -1,0 +1,1 @@
+Time-limited|3.036|10|0|10|100.0|0.0|0.0|[lorem, ipsum, is, simply, dummy, text, of, the, printing, and]
