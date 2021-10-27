@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.fastily:jwiki:1.8.0'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.0'
 }
@@ -29,11 +30,11 @@ test {
 }
 
 application {
-    mainClassName = "seedu.duke.Duke"
+    mainClassName = "seedu.typists.Main"
 }
 
 shadowJar {
-    archiveBaseName = "duke"
+    archiveBaseName = "typists"
     archiveClassifier = null
 }
 
@@ -43,4 +44,5 @@ checkstyle {
 
 run{
     standardInput = System.in
+    enableAssertions = true
 }
