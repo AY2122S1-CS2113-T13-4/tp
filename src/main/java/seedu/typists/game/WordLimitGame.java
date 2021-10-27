@@ -1,42 +1,35 @@
 package seedu.typists.game;
 
 import seedu.typists.exception.InvalidStringInputException;
-import seedu.typists.ui.TextUi;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
+import static seedu.typists.common.Utils.getWordLineFromStringArray;
 import static seedu.typists.parser.StringParser.splitString;
 
 public class WordLimitGame extends Game {
-
     private ArrayList<String> eachWord;
+    protected ArrayList<String[]> wordLines;
     protected int wordLimit;
     private int gameIndex;
-    private final int numberOfWordsDisplayed;
+    private final int wordsPerLine;
     private final String content1;
+    private long beginTime;
 
 
     public WordLimitGame(String targetWordSet, int wordsPerLine) {
         super();
         this.eachWord = new ArrayList<>(100);
         this.gameIndex = 0;
-        this.numberOfWordsDisplayed = wordsPerLine;
+        this.wordsPerLine = wordsPerLine;
         this.content1 = targetWordSet;
         this.wordLimit = getWordLimit();
     }
 
     @Override
     public void runGame() {
-        try {
-            game();
-        } catch (InvalidStringInputException e) {
-            e.printStackTrace();
-            //needs update
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            //needs update
-        }
+        game();
+        wordLimitGameSummary();
     }
 
     @Override
@@ -60,13 +53,32 @@ public class WordLimitGame extends Game {
         }
     }
 
-    public void trimContent(int wordLimit) throws InvalidStringInputException {
-        eachWord = splitString(content1, " ");
+    public void trimContent(int wordLimit) {
+        try {
+            eachWord = splitString(content1, " ");
+        } catch (InvalidStringInputException e) {
+            e.printStackTrace();
+        }
         eachWord = new ArrayList<>(eachWord.subList(0, wordLimit));
     }
 
-    public void game() throws InterruptedException, InvalidStringInputException {
+    public String[] getDisplayLines(ArrayList<String>wordLists, int row) {
+        int startIndex = (row - 1) * wordsPerLine;
+        assert startIndex >= 0 : "word index should be non-negative";
+        String[] line = new String[wordsPerLine];
+        try {
+            for (int i = 0; i < wordsPerLine; i++) {
+                line[i] = wordLists.get(startIndex + i);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println( "exceed content maximum.");
+        }
+        return line;
+    }
+
+    public void game()  {
         trimContent(wordLimit);
+        beginTime = getTimeNow();
         boolean isExit = false;
         int totalError = 0;
 
@@ -77,26 +89,38 @@ public class WordLimitGame extends Game {
             assert gameIndex < getTotalSentence() : "There are still texts to be typed.";
             String temp = "";
             int number = 0;
-
+            int row = 0;// for method: getDisplayLines()
+            row ++;
             while (gameIndex < getTotalSentence()) {
                 temp += eachWord.get(gameIndex) + " ";
                 gameIndex += 1;
                 number += 1;
-                if (number >= numberOfWordsDisplayed) {
+                if (number >= wordsPerLine) {
                     break;
                 }
             }
 
             actualWord += temp;
             temp = temp.trim();
-            ui.printLine(temp);
+            String[] displayed = getDisplayLines(eachWord,row);
+            displayedLines.add(displayed);
+            ui.printLine(displayed);
             String fullCommand = ui.readCommand();
             inputWord += fullCommand + " ";
 
             if (fullCommand.equals("Exit")) {
-                ui.showAnimatedWordLimitSummary(totalError, gameIndex);
+                try {
+                    ui.showAnimatedWordLimitSummary(totalError, gameIndex);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
+
+            //update for summary
+            List<String> inputs = new ArrayList<>();
+            inputs.add(fullCommand);
+            updateUserLines(inputs);
 
             WordLimitDataProcessor recordError = new WordLimitDataProcessor(fullCommand, temp);
             try {
@@ -105,17 +129,45 @@ public class WordLimitGame extends Game {
                 e.printStackTrace();
                 //do something
             }
-            //isExit = recordError.getIsExit();
-            ui.printGameMode1Progress(gameIndex, getTotalSentence());
+
+            try {
+                ui.printGameMode1Progress(gameIndex, getTotalSentence());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             if (gameIndex >= getTotalSentence()) {
-                ui.showAnimatedError(
-                        splitString(actualWord.trim(), " "),
-                        splitString(inputWord.trim(), " "),
-                        getTotalSentence()
-                );
+                try {
+                    ui.showAnimatedError(
+                            splitString(actualWord.trim(), " "),
+                            splitString(inputWord.trim(), " "),
+                            getTotalSentence()
+                    );
+                } catch (InterruptedException | InvalidStringInputException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
         }
+    }
+
+    public void wordLimitGameSummary() {
+        double realGameTime = duration(beginTime, getTimeNow());
+        HashMap<String, Object> summary = handleSummary(displayedLines, userLines, realGameTime, "Word-limited");
+        for (String[] arr : displayedLines) {
+            System.out.println("text");
+            System.out.println(Arrays.toString(arr));
+        }
+
+        for (String[] arr : userLines) {
+            System.out.println("input");
+            System.out.println(Arrays.toString(arr));
+        }
+
+        handleStorage(summary);
+    }
+
+    public void updateUserLines(List<String> stringArray) {
+        userLines = getWordLineFromStringArray(stringArray);
     }
 }

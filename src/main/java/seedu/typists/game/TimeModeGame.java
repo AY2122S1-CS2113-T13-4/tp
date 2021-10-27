@@ -1,9 +1,5 @@
 package seedu.typists.game;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
 
 import static seedu.typists.common.Messages.MESSAGE_TIME_GAME_END;
 import static seedu.typists.common.Utils.getWordLineFromStringArray;

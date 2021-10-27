@@ -12,7 +12,7 @@ public abstract class Game {
 
     public ArrayList<String[]> displayedLines = new ArrayList<>();
     public ArrayList<String[]> userLines = new ArrayList<>();
-    public double gameTime;
+
 
     public Game() {
         this.ui = new GameUi();
