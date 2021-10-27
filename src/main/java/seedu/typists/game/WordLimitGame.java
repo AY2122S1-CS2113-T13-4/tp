@@ -32,11 +32,6 @@ public class WordLimitGame extends Game {
         wordLimitGameSummary();
     }
 
-    @Override
-    public void gameSummary() {
-
-    }
-
     public int getTotalSentence() {
         return eachWord.size();
     }
