@@ -79,30 +79,10 @@ public class TextUi {
         return sc.nextLine();
     }
 
-    public void line() {
-        printScreen(DIVIDER);
-    }
-
-    /**
-     * Print error message.
-     *
-     * @param meg obtained from DukeException message
-     */
-    public void showText(String meg) {
-        System.out.println(meg);
-    }
-
-    public void showNumber(int i) {
-        System.out.println(String.valueOf(i));
-    }
-
     public void showBye() {
-        printScreen("Bye. Hope to see you again soon!");
+        printScreen("Thanks for using Typist! See you next time!");
     }
 
-    public void printGameMode1Progress(int a, int b) throws InterruptedException {
-        viewAnimateLeft("Your progress:" + String.valueOf(a) + "/" + String.valueOf(b));
-    }
 
     public void printKeyboard() {
         out.println(KEYBOARD);

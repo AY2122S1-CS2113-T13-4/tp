@@ -71,10 +71,12 @@ public class Messages {
     public static final String MESSAGE_HELP = "Manual:\n"
             + "content: set the content\n"
             + "word: start a new word game\n"
-            + "time: start a new timer game\n"
+            + "time: start a new timer game <-t> to specify time <-sn> to start immediately\n"
             + "history: view past game records\n"
             + "clear: clear all game records\n"
             + "bye: exit typist";
+
+    public static String MESSAGE_TIME_GAME_END = "Timer's UP!";
 
     //This sample text is gotten from https://www.lipsum.com/
     public static final String SAMPLE_TEXT = "lorem ipsum is simply dummy text of the printing and typesetting "
@@ -90,13 +92,4 @@ public class Messages {
             + "industry industry industry industry industry industry industry industry industry industry industry "
             + "industry industry industry industry industry industry industry industry industry industry industry "
             + "industry industry industry industry industry industry industry industry industry industry industry ";
-
-    //public static final String MESSAGE_GOODBYE = "Goodbye!";
-    //public static final String MESSAGE_INIT_FAILED = "Failed to initialise address book application. Exiting...";
-    //public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
-    //public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid";
-    //public static final String MESSAGE_PERSON_NOT_FOUND = "Person could not be found in address book";
-    //public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
-    //public static final String MESSAGE_PROGRAM_LAUNCH_ARGS_USAGE = "Launch command format: "
-    //        + "java seedu.typists.Main [STORAGE_FILE_PATH]";
 }

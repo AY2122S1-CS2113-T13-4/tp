@@ -15,7 +15,7 @@ import java.util.logging.ConsoleHandler;
 
 import static seedu.typists.common.Messages.SUMMARY;
 
-public class SummaryUi {
+public class SummaryUi extends TextUi {
 
     private static final Logger LOGGER = Logger.getLogger(TextUi.class.getName());
 

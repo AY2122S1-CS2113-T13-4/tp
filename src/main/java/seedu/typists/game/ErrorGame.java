@@ -43,4 +43,9 @@ public class ErrorGame extends Game {
         }
         System.out.println("Game Finished.");
     }
+
+    @Override
+    public void gameSummary() {
+
+    }
 }

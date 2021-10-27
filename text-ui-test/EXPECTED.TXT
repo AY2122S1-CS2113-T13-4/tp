@@ -1,4 +1,4 @@
-     | Typist - Version 1.0
+     | Typist - Version 2.0
      | ===========================================================
      |  ______            _      __
      |  /_  __/_  ______  (_)____/ /_
@@ -11,7 +11,10 @@
      | Manual:
      | content: set the content
      | word: start a new word game
-     | time: start a new timer game
+     | time: start a new timer game <-t> to specify time <-sn> to start immediately
+     | history: view past game records
+     | clear: clear all game records
      | bye: exit typist
      | ===========================================================
-     | Bye. Hope to see you again soon!
+Updating game records...
+     | Thanks for using Typist! See you next time!
